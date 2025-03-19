@@ -1,0 +1,4 @@
+uid,email,nickname,street,city,state,zip,genres,joined_date,first,last,subscription
+1,test@uci.edu,awong,"1111 1st Street",Irvine,CA,92616,"romance;comedy","2020-04-19",Alice,Wong,yearly
+2,john@example.com,jdoe,"2222 2nd Ave",Los Angeles,CA,90001,"action;thriller","2021-06-15",John,Doe,monthly
+3,sarah@uci.edu,sarah123,"3333 3rd Blvd",San Francisco,CA,94105,"drama;horror","2019-09-10",Sarah,Lee,free

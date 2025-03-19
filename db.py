@@ -8,27 +8,32 @@ def db_connection():
         password="password123", # password for my user
         database="ZotStreaming" # Schema name
     )
-        if conn.is_connected():
-            print("Connected to ZotStreaming Database! // Remove later probs")
+        return conn
     except mysql.connection.Error as e:
         print(f"Error: {e}")
+        return None
 
-# Maybe split this up to update and select?
-def execute_query(query, params=None, fetch=None):
-    conn = db_connection()
-    cursor = conn.cursor()
+# # Maybe split this up to update and select?
+# def execute_query(query, params=None, fetch=None):
+#     conn = db_connection()
+    
+#     if conn is None:
+#         print("Database connection has failed. :( )")
+#         return False if not fetch else []
+    
+#     cursor = conn.cursor()
 
-    try:
-        cursor.execute(query, params)
-        if fetch:
-            return cursor.fetchall()
-        conn.commit()
-        return True
-    except mysql.connector.Error as e:
-        print(f"Error: {e}")
-        return False
-    finally:
-        cursor.close()
-        conn.close()
-
-# db_connection()
+#     try:
+#         cursor.execute(query, params)
+#         if fetch:
+#             return cursor.fetchall()
+#         conn.commit()
+#         return True
+    
+#     except mysql.connector.Error as e:
+#         print(f"Error: {e}")
+#         return False
+    
+#     finally:
+#         cursor.close()
+#         conn.close()

@@ -14,7 +14,10 @@ def main():
 
     # 1
     if command == "import":
-        import_data(params[0])
+        if len(params) != 1:
+            print("Wrong. Should be python3 project.py import [file_name]")
+        else:
+            import_data(params[0])
     
     # 2
     elif command == "insertViewer":

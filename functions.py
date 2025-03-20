@@ -28,7 +28,6 @@ def import_data(folder_name):
 
         for table_name in TABLE_ORDER:
             file_path = os.path.join(folder_name, f"{table_name}.csv")
-            print(table_name)
             if os.path.exists(file_path):
                 import_csv(cursor, file_path, table_name)
 

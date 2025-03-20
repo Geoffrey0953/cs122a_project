@@ -62,8 +62,13 @@ def main():
     
     # 5
     elif command == "insertMovie":
-        pass
-        # insert_movie(*params)
+        if len(params) != 2:
+            print("Fail")
+        else:
+            rid = int(params[0])
+            website_url = params[1]
+            result = insert_movie(rid, website_url)
+            print(result)
     
     # 6 
     elif command == "insertSession":

@@ -3,13 +3,13 @@ import mysql.connector
 def db_connection():
     try:
         conn = mysql.connector.connect(
-        # host="127.0.0.1", # Change to match your MySQL server
-        user="test", # I made a separate user, but you guys can use root #zotstream
-        password="password", # password for my user #password123
-        database="cs122a" # Schema name #ZotStreaming
+        host="127.0.0.1", # Change to match your MySQL server
+        user="zotstream", # I made a separate user, but you guys can use root #zotstream
+        password="password123", # password for my user #password123
+        database="ZotStreaming" # Schema name #ZotStreaming
     )
         return conn
-    except mysql.connection.Error as e:
+    except mysql.connector.Error as e:
         print(f"Error: {e}")
         return None
 

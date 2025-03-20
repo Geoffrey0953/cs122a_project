@@ -1,5 +1,4 @@
-USE cs122a;
-
+-- USE cs122a;
 DROP TABLE IF EXISTS Reviews;
 DROP TABLE IF EXISTS Sessions;
 DROP TABLE IF EXISTS Videos;

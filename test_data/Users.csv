@@ -1,4 +1,0 @@
-uid,email,joined_date,nickname,street,city,state,zip,genres
-1,alice@uci.edu,2020-04-19,Alice,1111 1st Street,Irvine,CA,92616,romance;comedy
-2,bob@uci.edu,2021-06-15,Bob,2222 2nd Ave,Los Angeles,CA,90001,action;thriller
-3,charlie@uci.edu,2019-09-10,Charlie,3333 3rd Blvd,San Francisco,CA,94105,drama;horror

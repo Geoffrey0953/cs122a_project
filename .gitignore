@@ -1,0 +1,8 @@
+# Ignore everything
+*
+
+# Except these files
+!project.py
+!db.py
+!ddl.sql
+!functions.py

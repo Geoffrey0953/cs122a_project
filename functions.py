@@ -128,7 +128,7 @@ def add_genre(uid, genre):
 
         # If the genre already exists, return success
         if genre in genres_list:
-            print(f"Debug: Genre '{genre}' already exists for user {uid}.")
+            #print(f"Debug: Genre '{genre}' already exists for user {uid}.")
             return "Success"
 
         # Add the new genre
@@ -138,7 +138,7 @@ def add_genre(uid, genre):
         cursor.execute("UPDATE users SET genres = LOWER(%s) WHERE uid = %s;", (new_genres, uid))
         conn.commit()
 
-        print(f"Debug: Updated genres for user {uid} to {new_genres}.")
+        #print(f"Debug: Updated genres for user {uid} to {new_genres}.")
         return "Success"
 
     except mysql.connector.Error as e:
@@ -168,7 +168,7 @@ def delete_viewer(uid):
         user_check = cursor.fetchone()
 
         if not viewer_check and not user_check:
-            print(f"Debug: User {uid} does not exist in Viewers or Users.")
+            #print(f"Debug: User {uid} does not exist in Viewers or Users.")
             return "Success"
 
         # First delete from Viewers to prevent foreign key conflicts
@@ -178,7 +178,7 @@ def delete_viewer(uid):
         cursor.execute("DELETE FROM users WHERE uid = %s;", (uid,))
         conn.commit()
 
-        print(f"Debug: Successfully deleted user {uid} from Viewers and Users.")
+        #print(f"Debug: Successfully deleted user {uid} from Viewers and Users.")
         return "Success"
 
     except mysql.connector.Error as e:

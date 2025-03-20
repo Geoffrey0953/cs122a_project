@@ -10,7 +10,8 @@ def main():
     command = sys.argv[1]
 
     # the parameters are everything after the initial command.
-    params = sys.argv[2:] 
+    params = sys.argv[2:]
+    #print(sys.argv) 
 
     # 1
     if command == "import":
@@ -72,23 +73,52 @@ def main():
     
     # 6 
     elif command == "insertSession":
-        pass
-        # insert_session(*params)
+        if len(params) != 8:
+            print("Fail")
+        else:
+            try:
+                sid = int(params[0])
+                uid = int(params[1])
+                rid = int(params[2])
+                ep_num = int(params[3])
+                initiate_at = params[4].strip('"')
+                leave_at = params[5].strip('"')
+                quality = params[6]
+                device = params[7]
+                result = insert_session(sid, uid, rid, ep_num, initiate_at, leave_at, quality, device)
+                print(result)
+            except ValueError:
+                print("Fail")
     
     # 7
     elif command == "updateRelease":
-        pass
-        # update_release(*params)
-    
+        if len(params) != 2:
+            print("Fail")
+        else:
+            rid = int(params[0])
+            title = params[1].strip('"')
+            result = update_release(rid, title)
+            print(result)
+        
     # 8
     elif command == "listReleases":
-        pass
-        # list_releases(*params)
+        if len(params) != 1:
+            print("Fail")
+        else:
+            uid = int(params[0])
+            result = list_releases(uid)
+            if result == "Fail":
+                print("Fail")
     
     # 9
     elif command == "popularRelease":
-        pass
-        # popular_release(*params)
+        if len(params) != 1:
+            print("Fail")
+        else:
+            N = int(params[0])
+            result = popular_release(N)
+            if result == "Fail":
+                print("Fail")
     
     # 10
     elif command == "releaseTitle":

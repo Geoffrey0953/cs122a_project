@@ -122,7 +122,13 @@ def main():
     
     # 10
     elif command == "releaseTitle":
-        pass
+        if len(params) != 1:
+            print("Fail")
+        else:
+            sid = int(params[0])
+            result = release_title(sid)
+            if result == "Fail":
+                print("Fail")
 
    # 11
     elif command == "activeViewer":
@@ -145,7 +151,13 @@ def main():
 
     # 12
     elif command == "videosViewed":
-        pass
+        if len(params) != 1:
+            print("Fail")
+        else:
+            rid = int(params[0])
+            result = videos_viewed(rid)
+            if result == "Fail":
+                print("Fail")
 
     else:
         print("Unknown command")

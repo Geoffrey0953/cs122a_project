@@ -19,7 +19,6 @@ def import_data(folder_name):
     try:
         conn = db_connection()
         if conn is None:
-            print("Fail")
             return "Fail"
 
         cursor = conn.cursor()
@@ -35,7 +34,6 @@ def import_data(folder_name):
         cursor.close()
         #conn.close()
 
-        print("Success")
         return "Success"
     except Exception as e:
         print(f"Error: {e}")
@@ -107,7 +105,6 @@ def add_genre(uid, genre):
     try:
         conn = db_connection()
         if conn is None:
-            print("Database connection failed")
             return "Fail"
 
         cursor = conn.cursor()
@@ -116,7 +113,6 @@ def add_genre(uid, genre):
         cursor.execute("SELECT genres FROM users WHERE uid = %s;", (uid,))
         result = cursor.fetchone()
         if not result:
-            print(f"Error: User {uid} does not exist.")
             return "Fail"
 
         # Convert existing genres to lowercase
@@ -141,7 +137,6 @@ def add_genre(uid, genre):
         return "Success"
 
     except mysql.connector.Error as e:
-        print(f"MySQL Error in add_genre: {e}")
         return "Fail"
 
     finally:
@@ -194,7 +189,6 @@ def insert_movie(rid, website_url):
     try:
         conn = db_connection()
         if conn is None:
-            print("Database connection failed")
             return "Fail"
 
         cursor = conn.cursor()
@@ -204,7 +198,6 @@ def insert_movie(rid, website_url):
         release_exists = cursor.fetchone()
 
         if not release_exists:
-            print(f"Error: Release {rid} does not exist in Releases table.")
             return "Fail"
 
         # Insert into Movies Table
@@ -217,11 +210,9 @@ def insert_movie(rid, website_url):
         cursor.execute(query_movie, params_movie)
         conn.commit()
 
-        print(f"Successfully inserted movie with rid {rid} and website {website_url}")
         return "Success"
 
     except mysql.connector.Error as e:
-        print(f"MySQL Error in insert_movie: {e}")
         return "Fail"
 
     finally:
@@ -290,7 +281,6 @@ def list_releases(uid):
     try:
         conn = db_connection()
         if conn is None:
-            #print("Fail")
             return "Fail"
         cursor = conn.cursor()
 
@@ -305,7 +295,6 @@ def list_releases(uid):
         rows = cursor.fetchall()
 
         if len(rows) == 0:
-            print("No releases found for the given user.")
             return "Fail"
 
         for row in rows:
@@ -313,7 +302,6 @@ def list_releases(uid):
             print(','.join(formatted_row))
         return "Success"
     except mysql.connector.Error as e:
-        print(f"Error: {e}")
         return "Fail"
     finally:
         if cursor:
@@ -354,8 +342,42 @@ def popular_release(N):
         if conn:
             conn.close()
 
-def release_title():
-    pass
+def release_title(sid):
+    try:
+        conn = db_connection()
+        if conn is None:
+            return "Fail"
+        cursor = conn.cursor()
+
+        query = """
+        SELECT 
+            R.rid, R.title AS release_title, R.genre, 
+            V.title AS video_title, V.ep_num, V.length
+        FROM sessions S
+        JOIN videos V ON S.rid = V.rid AND S.ep_num = V.ep_num
+        JOIN releases R ON S.rid = R.rid
+        WHERE S.sid = %s
+        ORDER BY R.title ASC;
+        """
+        cursor.execute(query, (sid,))
+        rows = cursor.fetchall()
+
+        if not rows:
+            return "Fail"
+
+        for row in rows:
+            formatted_row = [str(field) if field is not None else '' for field in row]
+            print(','.join(formatted_row))
+        return "Success"
+
+    except mysql.connector.Error as e:
+        print(f"MySQL Error in release_title: {e}")
+        return "Fail"
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 def active_viewer(N, start_date, end_date):
     try:
@@ -390,6 +412,41 @@ def active_viewer(N, start_date, end_date):
         if conn:
             conn.close()
 
-def videos_viewed():
-    pass
+def videos_viewed(rid):
+    try:
+        conn = db_connection()
+        if conn is None:
+            return "Fail"
+        cursor = conn.cursor()
 
+        query = """
+        SELECT 
+            V.rid, V.ep_num, V.title, V.length,
+            COUNT(DISTINCT SS.uid) AS viewer_count
+        FROM videos V
+        LEFT JOIN (
+            SELECT DISTINCT uid, rid, ep_num
+            FROM sessions
+        ) AS SS ON V.rid = SS.rid AND V.ep_num = SS.ep_num
+        WHERE V.rid = %s
+        GROUP BY V.rid, V.ep_num, V.title, V.length
+        ORDER BY V.rid DESC, V.ep_num ASC;
+        """
+        cursor.execute(query, (rid,))
+        rows = cursor.fetchall()
+
+        if not rows:
+            return "Fail"
+
+        for row in rows:
+            print(','.join(str(field) if field is not None else '' for field in row))
+        return "Success"
+
+    except mysql.connector.Error as e:
+        print(f"MySQL Error in videos_viewed: {e}")
+        return "Fail"
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()

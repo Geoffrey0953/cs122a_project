@@ -124,7 +124,7 @@ def add_genre(uid, genre):
         # If the genre already exists, return success
         if genre in genres_list:
             #print(f"Debug: Genre '{genre}' already exists for user {uid}.")
-            return "Success"
+            return "Fail"
 
         # Add the new genre
         genres_list.add(genre)
@@ -294,8 +294,8 @@ def list_releases(uid):
         cursor.execute(query, (uid,))
         rows = cursor.fetchall()
 
-        if len(rows) == 0:
-            return "Fail"
+        # if len(rows) == 0:
+        #     return "Success"
 
         for row in rows:
             formatted_row = [str(field) if field is not None else '' for field in row]
@@ -420,31 +420,22 @@ def videos_viewed(rid):
         cursor = conn.cursor()
 
         query = """
-        SELECT 
-            V.rid, V.ep_num, V.title, V.length,
-            COUNT(DISTINCT SS.uid) AS viewer_count
-        FROM videos V
-        LEFT JOIN (
-            SELECT DISTINCT uid, rid, ep_num
-            FROM sessions
-        ) AS SS ON V.rid = SS.rid AND V.ep_num = SS.ep_num
-        WHERE V.rid = %s
-        GROUP BY V.rid, V.ep_num, V.title, V.length
-        ORDER BY V.rid DESC, V.ep_num ASC;
+            SELECT v.rid, v.ep_num, v.title, v.length, COUNT(DISTINCT s.uid) AS COUNT
+            FROM videos v
+            LEFT JOIN sessions AS s ON v.rid = s.rid
+            WHERE v.rid = %s
+            GROUP BY v.rid, v.ep_num, v.title, v.length
+            ORDER BY v.rid;
         """
         cursor.execute(query, (rid,))
-        rows = cursor.fetchall()
+        results = cursor.fetchall()
 
-        if not rows:
-            return "Fail"
-
-        for row in rows:
-            print(','.join(str(field) if field is not None else '' for field in row))
-        return "Success"
-
-    except mysql.connector.Error as e:
-        print(f"MySQL Error in videos_viewed: {e}")
+        for x in results:
+            print(f"{x[0]},{x[1]},{x[2]},{x[3]},{x[4]}")  
+        
+    except mysql.connector.Error:
         return "Fail"
+    
     finally:
         if cursor:
             cursor.close()

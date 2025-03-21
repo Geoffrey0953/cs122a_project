@@ -357,8 +357,38 @@ def popular_release(N):
 def release_title():
     pass
 
-def active_viewer():
-    pass
+def active_viewer(N, start_date, end_date):
+    try:
+        conn = db_connection()
+        if conn is None:
+            return "Fail"
+        cursor = conn.cursor()
+        # query
+        query = """
+        SELECT V.uid, V.first_name, V.last_name
+        FROM viewers V
+        JOIN sessions S on V.uid = S.uid
+        WHERE S.initiate_at BETWEEN %s AND %s
+        GROUP BY V.uid, V.first_name, V.last_name
+        HAVING COUNT(S.sid) >= %s
+        ORDER BY V.uid ASC;
+        """
+        cursor.execute(query, (start_date, end_date, N))
+        rows = cursor.fetchall()
+
+        if not rows:
+            return "Fail"
+        
+        return rows
+    
+    except mysql.connector.Error as e:
+        print(f"MySQL Error in active_viewer: {e}")
+        return "Fail"
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 def videos_viewed():
     pass

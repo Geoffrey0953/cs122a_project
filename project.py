@@ -124,9 +124,24 @@ def main():
     elif command == "releaseTitle":
         pass
 
-    # 11
+   # 11
     elif command == "activeViewer":
-        pass
+        if len(params) != 3:
+            print("Fail")
+        else:
+            try:
+                N = int(params[0])
+                start_date = params[1]
+                end_date = params[2]
+                result = active_viewer(N, start_date, end_date)
+                if result == "Fail":
+                    print("Fail")
+                else:
+                    for row in result:
+                        uid, first_name, last_name = row
+                        print(f"{uid},{first_name},{last_name}")
+            except ValueError:
+                print("Fail")
 
     # 12
     elif command == "videosViewed":
